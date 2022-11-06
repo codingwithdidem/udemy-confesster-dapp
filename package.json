@@ -9,6 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.3.7",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@fontsource/m-plus-rounded-1c": "^4.5.10",
+    "@fontsource/open-sans": "^4.5.13",
+    "framer-motion": "^6.5.1",
     "next": "13.0.2",
     "react": "18.2.0",
     "react-dom": "18.2.0"
