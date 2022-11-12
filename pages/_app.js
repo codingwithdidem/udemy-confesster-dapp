@@ -10,7 +10,7 @@ import Layout from "../components/Layout";
 import "../styles/globals.css";
 
 const config = {
-  projectId: "b34cb6ee1c84bfc5a40083359e3785b5",
+  projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
   theme: "dark",
   accentColor: "magenta",
   ethereum: {
