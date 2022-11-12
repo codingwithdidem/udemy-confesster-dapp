@@ -43,7 +43,7 @@ const NavLink = ({ children, to }) => (
   </Link>
 );
 
-const Layout = () => {
+const Layout = ({ children }) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { account, isReady } = useAccount();
@@ -169,6 +169,10 @@ const Layout = () => {
             </Stack>
           </Box>
         ) : null}
+      </Box>
+
+      <Box px={4} maxWidth={"5xl"} m={"auto"} mt={"5"}>
+        {children}
       </Box>
     </Box>
   );
