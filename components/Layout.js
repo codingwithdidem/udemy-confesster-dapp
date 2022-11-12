@@ -1,5 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import { Web3Button } from "@web3modal/react";
+import { useAccount } from "@web3modal/react";
 import {
   Box,
   Flex,
@@ -44,6 +46,8 @@ const NavLink = ({ children, to }) => (
 const Layout = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { account, isReady } = useAccount();
+
   return (
     <Box
       h="100vh"
@@ -97,25 +101,26 @@ const Layout = () => {
               mr={4}
             />
 
-            <Button
-              variant={"solid"}
-              colorScheme={"pink"}
-              size={"sm"}
-              mr={4}
-              leftIcon={<AddIcon />}
-              onClick={() => {}}
-            >
-              Confess
-            </Button>
-            <Button
-              variant={"solid"}
-              colorScheme={"blue"}
-              size={"sm"}
-              mr={4}
-              onClick={() => {}}
-            >
-              Connect Wallet
-            </Button>
+            {isReady && account.isConnected && (
+              <Button
+                variant={"solid"}
+                colorScheme={"pink"}
+                size={"sm"}
+                mr={4}
+                leftIcon={<AddIcon />}
+                onClick={() => {}}
+              >
+                Confess
+              </Button>
+            )}
+
+            {isReady && account.isConnected ? (
+              <Button variant={"outline"} colorScheme={"pink"} size={"sm"}>
+                {account.address?.slice(0, 6)}...{account?.address.slice(-4)}
+              </Button>
+            ) : (
+              <Web3Button />
+            )}
           </Flex>
           <IconButton
             size={"md"}
@@ -141,25 +146,26 @@ const Layout = () => {
                 mr={4}
               />
 
-              <Button
-                variant={"solid"}
-                colorScheme={"pink"}
-                size={"sm"}
-                mr={4}
-                leftIcon={<AddIcon />}
-                onClick={() => {}}
-              >
-                Confess
-              </Button>
-              <Button
-                variant={"solid"}
-                colorScheme={"blue"}
-                size={"sm"}
-                mr={4}
-                onClick={() => {}}
-              >
-                Connect Wallet
-              </Button>
+              {isReady && account.isConnected && (
+                <Button
+                  variant={"solid"}
+                  colorScheme={"pink"}
+                  size={"sm"}
+                  mr={4}
+                  leftIcon={<AddIcon />}
+                  onClick={() => {}}
+                >
+                  Confess
+                </Button>
+              )}
+
+              {isReady && account.isConnected ? (
+                <Button variant={"outline"} colorScheme={"pink"} size={"sm"}>
+                  {account.address?.slice(0, 6)}...{account?.address.slice(-4)}
+                </Button>
+              ) : (
+                <Web3Button />
+              )}
             </Stack>
           </Box>
         ) : null}
