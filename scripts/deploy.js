@@ -1,30 +1,25 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// You can also run a script with `npx hardhat run <script>`. If you do that, Hardhat
-// will compile your contracts, add the Hardhat Runtime Environment's members to the
-// global scope, and execute the script.
 const hre = require("hardhat");
+const fs = require("fs-extra");
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
+  const Confesster = await hre.ethers.getContractFactory("Confesster");
+  const confesster = await Confesster.deploy();
 
-  const lockedAmount = hre.ethers.utils.parseEther("1");
+  await confesster.deployed();
 
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+  console.log("Confesster deployed to:", confesster.address);
 
-  await lock.deployed();
-
-  console.log(
-    `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
+  // We also want to save contract address and owner address to a file
+  // so that we can use it in our frontend
+  fs.writeFileSync(
+    "config.js",
+    `
+      export const contractAddress = "${confesster.address}";
+      export const ownerAddress = "${confesster.signer.address}";
+    `
   );
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
 main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
