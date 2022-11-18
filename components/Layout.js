@@ -22,6 +22,8 @@ import {
   SunIcon,
 } from "@chakra-ui/icons";
 
+import ConfessionModal from "./ConfessionModal";
+
 const links = [
   { label: "My Confessions", to: "/myconfessions" },
   { label: "Coffees", to: "/coffees" },
@@ -47,6 +49,12 @@ const Layout = ({ children }) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { account, isReady } = useAccount();
+
+  const {
+    isOpen: isModalOpen,
+    onOpen: onModalOpen,
+    onClose: onModalClose,
+  } = useDisclosure();
 
   return (
     <Box
@@ -108,7 +116,7 @@ const Layout = ({ children }) => {
                 size={"sm"}
                 mr={4}
                 leftIcon={<AddIcon />}
-                onClick={() => {}}
+                onClick={onModalOpen}
               >
                 Confess
               </Button>
@@ -174,6 +182,8 @@ const Layout = ({ children }) => {
       <Box px={4} maxWidth={"5xl"} m={"auto"} mt={"5"}>
         {children}
       </Box>
+
+      <ConfessionModal isOpen={isModalOpen} onClose={onModalClose} />
     </Box>
   );
 };
