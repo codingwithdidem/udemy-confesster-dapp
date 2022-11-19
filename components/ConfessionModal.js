@@ -13,9 +13,16 @@ import {
   Textarea,
   Select,
   Button,
+  useToast,
+  Link,
 } from "@chakra-ui/react";
 
+import saveToIPFS from "../utils/saveToIPFS";
+import getContract from "../utils/getContract";
+
 const ConfessionModal = ({ isOpen, onClose }) => {
+  const toast = useToast();
+
   const [audio, setAudio] = useState(null);
   const [message, setMessage] = useState("");
   const [category, setCategory] = useState("");
@@ -24,7 +31,53 @@ const ConfessionModal = ({ isOpen, onClose }) => {
   const initialRef = useRef();
   const audioRef = useRef();
 
-  const makeConfession = () => {};
+  const makeConfession = async () => {
+    if (typeof window.ethereum !== undefined) {
+      try {
+        setIsSubmitting(true);
+        // Save audio to IPFS
+        const audioCid = await saveToIPFS(audio);
+
+        const contract = getContract();
+        const tx = await contract.createConfession(message, audioCid, category);
+
+        toast({
+          title: "Hurrah!",
+          description: (
+            <>
+              <p>It may take a few minutes for your confession to show up.</p>
+
+              <Link
+                href={`https://goerli.etherscan.io/tx/${tx.hash}`}
+                target="_blank"
+                rel="noreferrer"
+                textDecoration={"underline"}
+              >
+                check the status of your confession on Etherscan
+              </Link>
+            </>
+          ),
+          status: "info",
+          position: "top-right",
+          duration: 5000,
+          isClosable: true,
+        });
+      } catch (error) {
+        console.log("Error: ", err);
+        toast({
+          title: "Whoops!",
+          description: "Something went wrong.",
+          status: "error",
+          position: "top-right",
+          duration: 5000,
+          isClosable: true,
+        });
+      } finally {
+        setIsSubmitting(false);
+        onClose();
+      }
+    }
+  };
 
   return (
     <>
