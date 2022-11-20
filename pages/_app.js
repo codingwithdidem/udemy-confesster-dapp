@@ -2,10 +2,13 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { extendTheme } from "@chakra-ui/react";
 import { Web3Modal } from "@web3modal/react";
 import { chains } from "@web3modal/ethereum";
+import { ApolloProvider } from "@apollo/client";
 
 import "@fontsource/m-plus-rounded-1c";
 import "@fontsource/open-sans";
 import Layout from "../components/Layout";
+
+import client from "../apollo-client";
 
 import "../styles/globals.css";
 
@@ -28,14 +31,14 @@ export const theme = extendTheme({
 
 function MyApp({ Component, pageProps }) {
   return (
-    <>
+    <ApolloProvider client={client}>
       <ChakraProvider theme={theme}>
         <Layout>
           <Component {...pageProps} />
         </Layout>
       </ChakraProvider>
       <Web3Modal config={config} />
-    </>
+    </ApolloProvider>
   );
 }
 
