@@ -1,9 +1,11 @@
 import Head from "next/head";
+import { useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 import { Grid, GridItem, Heading, Text } from "@chakra-ui/react";
 
 import ConfessionCard from "../components/ConfessionCard";
 import ConfessionCardSkeleton from "../components/skeleton/ConfessionCardSkeleton";
+import Filter from "../components/Filter";
 
 const GET_CONFESSIONS = gql`
   query confessions(
@@ -31,12 +33,16 @@ const GET_CONFESSIONS = gql`
 `;
 
 export default function Home() {
+  const [activeTag, setActiveTag] = useState("All");
   const { loading, error, data } = useQuery(GET_CONFESSIONS, {
     variables: {
       first: 10,
       skip: 0,
       orderBy: "timestamp",
       orderDirection: "desc",
+      ...(activeTag !== "All" && {
+        where: { category: activeTag.toLocaleLowerCase() },
+      }),
     },
   });
 
@@ -67,6 +73,7 @@ export default function Home() {
             you can&apos;t take it back.
           </Text>
         </Heading>
+        <Filter activeTag={activeTag} setActiveTag={setActiveTag} />
         <Grid
           mt="10"
           templateColumns={{
