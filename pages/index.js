@@ -1,5 +1,8 @@
 import Head from "next/head";
 import { useQuery, gql } from "@apollo/client";
+import { Grid, GridItem } from "@chakra-ui/react";
+
+import ConfessionCard from "../components/ConfessionCard";
 
 const GET_CONFESSIONS = gql`
   query confessions(
@@ -49,9 +52,17 @@ export default function Home() {
       </Head>
 
       <main>
-        <h1>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <Grid mt="10" templateColumns="repeat(2, 1fr)" gap={6}>
+          {data.confessions.map((confession, index) => (
+            <GridItem colSpan={1} key={index}>
+              <ConfessionCard
+                key={index}
+                index={index}
+                confession={confession}
+              />
+            </GridItem>
+          ))}
+        </Grid>
       </main>
     </div>
   );
