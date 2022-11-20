@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useQuery, gql } from "@apollo/client";
-import { Grid, GridItem } from "@chakra-ui/react";
+import { Grid, GridItem, Heading, Text } from "@chakra-ui/react";
 
 import ConfessionCard from "../components/ConfessionCard";
 import ConfessionCardSkeleton from "../components/skeleton/ConfessionCardSkeleton";
@@ -51,20 +51,40 @@ export default function Home() {
       </Head>
 
       <main>
-        <Grid mt="10" templateColumns="repeat(2, 1fr)" gap={6}>
+        <Heading
+          size={"lg"}
+          lineHeight="tall"
+          textAlign={"center"}
+          maxWidth="xl"
+          mx="auto"
+        >
+          Once you confess,
+          <Text
+            bgGradient={"linear(to-r, purple.300,pink.300,blue.300,teal.300)"}
+            bgClip="text"
+          >
+            {" "}
+            you can&apos;t take it back.
+          </Text>
+        </Heading>
+        <Grid
+          mt="10"
+          templateColumns={{
+            base: "repeat(1, 1fr)",
+            md: "repeat(2, 1fr)",
+          }}
+          gap={6}
+          justifyContent={"center"}
+        >
           {loading
             ? new Array(6).fill(0).map((_, index) => (
                 <GridItem key={index}>
                   <ConfessionCardSkeleton />
                 </GridItem>
               ))
-            : data.confessions.map((confession, index) => (
-                <GridItem key={index}>
-                  <ConfessionCard
-                    key={index}
-                    index={index}
-                    confession={confession}
-                  />
+            : data?.confessions?.map((confession, index) => (
+                <GridItem colSpan={1} key={confession.id}>
+                  <ConfessionCard confession={confession} index={index} />
                 </GridItem>
               ))}
         </Grid>
