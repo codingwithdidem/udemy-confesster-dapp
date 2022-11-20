@@ -3,6 +3,7 @@ import { useQuery, gql } from "@apollo/client";
 import { Grid, GridItem } from "@chakra-ui/react";
 
 import ConfessionCard from "../components/ConfessionCard";
+import ConfessionCardSkeleton from "../components/skeleton/ConfessionCardSkeleton";
 
 const GET_CONFESSIONS = gql`
   query confessions(
@@ -39,10 +40,8 @@ export default function Home() {
     },
   });
 
-  if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
-  console.log(data);
   return (
     <div>
       <Head>
@@ -53,15 +52,21 @@ export default function Home() {
 
       <main>
         <Grid mt="10" templateColumns="repeat(2, 1fr)" gap={6}>
-          {data.confessions.map((confession, index) => (
-            <GridItem colSpan={1} key={index}>
-              <ConfessionCard
-                key={index}
-                index={index}
-                confession={confession}
-              />
-            </GridItem>
-          ))}
+          {loading
+            ? new Array(6).fill(0).map((_, index) => (
+                <GridItem key={index}>
+                  <ConfessionCardSkeleton />
+                </GridItem>
+              ))
+            : data.confessions.map((confession, index) => (
+                <GridItem key={index}>
+                  <ConfessionCard
+                    key={index}
+                    index={index}
+                    confession={confession}
+                  />
+                </GridItem>
+              ))}
         </Grid>
       </main>
     </div>
