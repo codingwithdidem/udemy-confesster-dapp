@@ -1,0 +1,16 @@
+type Coffee @entity(immutable: true) {
+  id: ID!
+  buyer: Bytes! # address
+  author: Bytes! # address
+  message: String! # string
+  timestamp: BigInt! # uint256
+}
+
+type Confession @entity(immutable: true) {
+  id: ID!
+  hash: String! # string
+  message: String! # string
+  category: String! # string
+  author: Bytes! # address
+  timestamp: BigInt! # uint256
+}

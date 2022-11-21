@@ -1,0 +1,27 @@
+specVersion: 0.0.5
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Confesster
+    network: goerli
+    source:
+      address: "0x93266D756a97068E912720f22A4c93654bf5F358"
+      abi: Confesster
+      startBlock: 7961555
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Coffee
+        - Confession
+      abis:
+        - name: Confesster
+          file: Confesster/abis/Confesster.json
+      eventHandlers:
+        - event: CoffeeBought(uint256,address,address,string,uint256)
+          handler: handleCoffeeBought
+        - event: ConfessionCreated(uint256,string,string,string,address,uint256)
+          handler: handleConfessionCreated
+      file: Confesster/Confesster.wasm
